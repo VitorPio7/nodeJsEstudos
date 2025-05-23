@@ -1,10 +1,10 @@
 const express = require('express');
 const morgan = require('morgan');
-
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
-
+const qs = require('qs');
 const app = express();
+app.search('query parser',(str)=>qs.parse(str));
 if(process.env.NODE_ENV === 'development'){
   app.use(morgan('dev'));/*esse morgan possibilita a visualizacao do 
   middleware através do console */

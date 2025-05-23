@@ -26,8 +26,41 @@ const Tour = require('./../models/tourModel')
  //ela vai ser usada no params middleware */
  exports.getTours = async(req,res)=>{
  try{
-   const tours = await Tour.find()/*esse find vai retornar um array com todos os docs do DB de tour */
-   res.status(201).json({
+   /*eu posso usar dessa forma */
+   //BUILD QUERY
+   // 1A) Filtering  
+   const queryObj = {...req.query};
+    console.log(req.query)/**shallow copy evita mutacao indesejada */
+    const excludedFields = ['page','sort','limit','fields'];/*campos que nao devem ser usados para filtrar o banco */
+    excludedFields.forEach(el=> delete queryObj[el]);
+    
+    // 1B) Advanced filtering  
+    let queryStr = JSON.stringify(queryObj);
+    queryStr=queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match=>`$${match}`);
+    const query = Tour.find(JSON.parse(queryStr));
+
+    // 2) Sorting
+    /**127.0.0.1:8000/api/v1/tours?sort=price,ratingsAverage */
+    if(req.query.sort){
+        const sortBy = req.query.sort.split(',').join(' ')
+        console.log(sortBy);
+        query = query.sort(sortBy);
+        //sort('price ratingAverage');
+    }
+    //EXECUTE QUERY
+    const tours = await query;
+
+  /*esse find vai retornar um array com todos os docs do DB de tour */
+   
+   /*ou dessa forma*/
+// const tours = await Tour.find()
+//    .where('duration')
+//    .equals(5)
+//    .where('difficulty')
+//    .equals('easy');
+
+    //SEND RESPONSE
+res.status(201).json({
        status:'success',
        results:tours.length,
        data:{
