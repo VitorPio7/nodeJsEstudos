@@ -3,6 +3,9 @@ const tourController = require('./../controllers/tourController');
 const router = express.Router();/*criacao de um middleware personalizado */
 
 // router.param('id',tourController.chekID);/*esse é um middleware onde vai ser usada essa funcao para verificar id *//
+
+router.route('/top-5-cheap').get(tourController.aliasTopTours, tourController.getTours);
+
 router
 .route('/')
 .get(tourController.getTours)
