@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
-
+const bcrypt = require('bcryptjs');
 //name, email, photo, password, passwordConfirm
 
 const userSchema = new mongoose.Schema({
@@ -21,14 +21,61 @@ const userSchema = new mongoose.Schema({
     type: String,
     trim: true,
     required: [true, 'You must have to put the password.'],
-    minlength: 8
+    minlength: 8,
+    select: false
   },
   passwordConfirm: {
     type: String,
-    required: [true, 'You must have to confirm the password.']
+    required: [true, 'You must have to confirm the password.'],
+    validate: {
+      //This only works on SAVE!!!
+      validator: function(el) {
+        return el === this.password; //verificacao pra ver se as senhas sao iguais//
+      },
+      message: 'Passwords are not the same'
+    }
+  },
+  passwordChangedAt: Date,
+  role: { /*rega pelo qual define o tipo de usuário do site */
+    type: String,
+    enum: {
+      values: ['user', 'guide', 'lead-guide', 'admin'],
+      message: 'Role must be either user, guide, lead-guide, or admin'
+    },
+    default: 'user'
   }
 });
+/*esse midleware tem o papel de encripitar a senha antes de ser processada para o DB */
+userSchema.pre('save', async function(next) {
+  //Roda essa funcao se a senha for de fato modificada
+  if (!this.isModified('password')) return next();
+  //Hash a senha com o custo de 12, sendo esse número escolhido para velocidade e segurança
+  this.password = await bcrypt.hash(this.password, 12);
+  //Deleta o campo do passwordConfirm garante que não seja salvo no DB pois nao tem necessidade.
+  this.passwordConfirm = undefined;
+  next();
+});
 
+/*middleware responsável por dizer se a senha do JWT é igual ao do usuário, para isso é necessário usar o bcrypt para descriptar novamente*/
+userSchema.methods.correctPassword = async function(
+  candidatePassword,
+  userPassword
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+/*Schema que verifica se mudou a senha */
+userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+    console.log(changedTimestamp, JWTTimestamp);
+    return JWTTimestamp < changedTimestamp;
+  }
+  return false;
+};
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
