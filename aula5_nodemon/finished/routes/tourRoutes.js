@@ -1,7 +1,8 @@
 const express = require('express');
 const tourController = require('./../controllers/tourController');
-const router = express.Router();
 const authController = require('./../controllers/authController');
+
+const router = express.Router();
 
 // router.param('id', tourController.checkID);
 
@@ -14,7 +15,7 @@ router.route('/monthly-plan/:year').get(tourController.getMonthlyPlan);
 
 router
   .route('/')
-  .get(authController.protect, tourController.getAllTours) /*o primeiro middleware serve para proteger os conteudos das paginas que devem ser apresentadas */
+  .get(authController.protect, tourController.getAllTours)
   .post(tourController.createTour);
 
 router
@@ -23,9 +24,8 @@ router
   .patch(tourController.updateTour)
   .delete(
     authController.protect,
-    authController.restrictTo('admin', 'lead-guide'),/*essa acao vai ser restringido para apenas esses usuários, chama-se "user-role" */
+    authController.restrictTo('admin', 'lead-guide'),
     tourController.deleteTour
   );
-router.post('/forgotPassword', authController.forgotPassword);
-router.patch('/resetPassword/:token', authController.resetPassword);
+
 module.exports = router;

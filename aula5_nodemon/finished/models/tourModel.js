@@ -80,20 +80,16 @@ const tourSchema = new mongoose.Schema(
     }
   },
   {
-    /*formato do virtuals */
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
   }
 );
-/*responsável por criar propiedades falsas nos documentos, ou seja, nao são salvos no DB, mas podem ser acessados normalmente
- */
 
 tourSchema.virtual('durationWeeks').get(function() {
   return this.duration / 7;
 });
 
 // DOCUMENT MIDDLEWARE: runs before .save() and .create()
-/**slugify é usada para tornar a url mais amigável */
 tourSchema.pre('save', function(next) {
   this.slug = slugify(this.name, { lower: true });
   next();
@@ -112,7 +108,7 @@ tourSchema.pre('save', function(next) {
 // QUERY MIDDLEWARE
 // tourSchema.pre('find', function(next) {
 tourSchema.pre(/^find/, function(next) {
-  this.find({ secretTour: { $ne: true } }); /*o $ne significa "not equals" */
+  this.find({ secretTour: { $ne: true } });
 
   this.start = Date.now();
   next();
