@@ -1,0 +1,19 @@
+{
+  "name": "parte1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "formidable": "^3.5.4",
+    "parte1": "file:",
+    "request": "^2.88.2"
+  }
+}
