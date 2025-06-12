@@ -1,11 +1,13 @@
 /*responsável por lidar com os dados e o view */
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 import { getAll, remove, get, save } from "./model.js";
-import { render } from "./view.js";
 import { render as form } from "./form.js";
 export async function listAction(request, response) {
   const data = await getAll();
-  const body = render(data);
-  response.send(body);
+  response.render(`${dirname(fileURLToPath(import.meta.url))}/views/list`, {
+    movie: data[0],
+  });
 }
 
 export async function removeAction(request, response) {
