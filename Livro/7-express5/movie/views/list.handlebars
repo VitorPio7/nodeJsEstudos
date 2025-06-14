@@ -1,0 +1,22 @@
+<html>
+
+  <head>
+    <title>Handlebars example</title>
+  </head>
+
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th>{{uc 'Id'}}</th>
+          <th>{{uc 'Title'}}</th>
+          <th>{{uc 'Year'}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#eachmovies}}{{>listItem}}{{/each}}
+      </tbody>
+    </table>
+  </body>
+
+</html>

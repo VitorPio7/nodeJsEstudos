@@ -1,12 +1,23 @@
-/*responsável por lidar com os dados e o view */
-import { dirname } from "path";
-import { fileURLToPath } from "url";
+/*responsável por lidar com os dados e o view e o model*/
 import { getAll, remove, get, save } from "./model.js";
 import { render as form } from "./form.js";
+import handlebars, { partials } from "handlebars";
+import { readFileSync } from "fs";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+
+const listItem = handlebars.compile(
+  readFileSync(
+    `${dirname(fileURLToPath(import.meta.url))}/views/list-item.handlebars`,
+    "utf-8"
+  )
+);
 export async function listAction(request, response) {
   const movies = await getAll();
-  response.render(`${dirname(fileURLToPath(import.meta.url))}/views/list`, {
+  response.render("list", {
+    layout: false,
     movies,
+    partials: { listItem },
   });
 }
 

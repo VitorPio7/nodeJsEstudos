@@ -1,0 +1,21 @@
+{
+  "name": "6-express5",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^5.0.0-alpha.8",
+    "express-handlebars": "^8.0.1",
+    "handlebars": "^4.7.8",
+    "morgan": "^1.10.0",
+    "pug": "^3.0.3",
+    "spdy": "^4.0.2"
+  }
+}
