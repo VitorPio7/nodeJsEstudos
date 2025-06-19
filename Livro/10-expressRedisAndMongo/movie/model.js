@@ -35,21 +35,36 @@
 //   });
 // }
 
-import { MongoClient } from "mongodb";
-let collection = null;
+import mongoose from "mongoose";
 
-async function connect() {
-  if (collection) {
-    return collection;
-  }
-  const client = new MongoClient("mongodb://localhost:27017");
-  await client.connect();
-  const db = client.db("moviedb");
-  collection = db.collection("Movie");
-  return collection;
+mongoose.connect(
+  "mongodb+srv://vitorvpio60:10203050@cluster2.l3zmbxr.mongodb.net/"
+);
+
+const Movie = mongoose.model("movies", {
+  id: Number,
+  title: String,
+  year: Number,
+});
+export function getAll() {
+  return Movie.find({});
 }
-
-export async function getAll() {}
-export async function get(id) {}
-export async function remove(id) {}
-export function save(movie) {}
+export function get(id) {
+  return Movie.findOne({ id });
+}
+export async function remove(id) {
+  const movie = await get(id);
+  return movie.remove();
+}
+export async function save(movie) {
+  if (!movie.id) {
+    const newMovie = new Movie(movie);
+    newMovie.id = Date.now();
+    return newMovie.save();
+  } else {
+    const existingMovie = await get(parseInt(movie.id, 10));
+    existingMovie.title = movie.title;
+    existingMovie.year = movie.year;
+    return existingMovie.save();
+  }
+}
