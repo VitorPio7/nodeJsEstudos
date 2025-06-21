@@ -1,31 +1,38 @@
-import { IsEmail } from 'class-validator';
 import {
-  AfterUpdate,
   AfterInsert,
   AfterRemove,
+  AfterUpdate,
   Entity,
   Column,
   PrimaryGeneratedColumn,
+  OneToMany,
 } from 'typeorm';
-import { Exclude } from 'class-transformer';
+import { Report } from '../reports/report.entity';
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
+
   @Column()
-  @IsEmail()
   email: string;
+
   @Column()
-  @Exclude()
   password: string;
+
+  @OneToMany(() => Report, (report) => report.user)
+  reports: Report[];
+
   @AfterInsert()
   logInsert() {
     console.log('Inserted User with id', this.id);
   }
+
   @AfterUpdate()
   logUpdate() {
     console.log('Updated User with id', this.id);
   }
+
   @AfterRemove()
   logRemove() {
     console.log('Removed User with id', this.id);
