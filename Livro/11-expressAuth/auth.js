@@ -4,6 +4,8 @@ import LocalStrategy from "passport-local";
 import { createHash } from "crypto";
 import { get } from "./user/model";
 export default function (app) {
+  /*serializeUser e deserializeUser serve para aceitar uma funcao que é usada para restaurar o
+  dado do usuário para requests subsequentes */
   passport.serializeUser((user, done) => done(null, user.id));
   passport.deserializeUser(async (id, done) => {
     const user = await get({ id });
@@ -13,6 +15,7 @@ export default function (app) {
       done(null, user);
     }
   });
+  /**middleware responsável por configurar a estratégia desejada */
   passport.use(
     new LocalStrategy(async (username, password, done) => {
       /*converter a senha em um hash md5 */
