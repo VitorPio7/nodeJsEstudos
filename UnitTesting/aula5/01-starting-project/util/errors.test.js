@@ -1,24 +1,38 @@
-import { HttpError, ValidationError } from "./errors";
-import { it, describe, expect, beforeEach } from "vitest";
-let newHttpError;
-beforeEach(() => {
-  newHttpError = new HttpError(404, "Ocurred an error", "There is no data.");
-});
-beforeEach(() => {});
+import { describe, expect, it } from 'vitest';
 
-describe("httpError()", () => {
-  it("should show this properties.", () => {
-    expect(newHttpError).toHaveProperty("statusCode");
-    expect(newHttpError).toHaveProperty("message");
-    expect(newHttpError).toHaveProperty("data");
+import { HttpError, ValidationError } from './errors';
+
+describe('class HttpError', () => {
+  it('should contain the provided status code, message and data', () => {
+    const testStatus = 1;
+    const testMessage = 'Test';
+    const testData = { key: 'test' };
+
+    const testError = new HttpError(testStatus, testMessage, testData);
+
+    expect(testError.statusCode).toBe(testStatus);
+    expect(testError.message).toBe(testMessage);
+    expect(testError.data).toBe(testData);
   });
-});
-describe("httpError()", () => {
-  it("Should accetps this type of primitives.", () => {
-    expect(newHttpError.data).toBeTypeOf("string");
-    expect(newHttpError.message).toBeTypeOf("string");
-    expect(newHttpError.statusCode).toBeTypeOf("number");
-  });
+
+  it('should contain undefined as data if no data is provided', () => {
+    const testStatus = 1;
+    const testMessage = 'Test';
+
+    const testError = new HttpError(testStatus, testMessage);
+
+    expect(testError.statusCode).toBe(testStatus);
+    expect(testError.message).toBe(testMessage);
+    expect(testError.data).toBeUndefined();
+  })
 });
 
-describe("validationError()", () => {});
+describe('class ValidationError', () => {
+  it('should contain the provided message', () => {
+    const testMessage = 'test';
+
+    const testError = new ValidationError(testMessage);
+
+    expect(testError.message).toBe(testMessage);
+  })
+});
