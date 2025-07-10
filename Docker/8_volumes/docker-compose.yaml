@@ -1,0 +1,27 @@
+version: '3.3'
+
+services:
+  db:
+    image: mysql_mysqldb
+    restart: always
+    env_file:
+      - ./config/db.env
+    ports:
+      - "3306:3306"
+    networks:
+      - dockercompose
+
+  backend:
+    depends_on:
+      - db
+    
+    ports:
+      - "5000:5000"
+    restart: always
+    volumes:
+      - /home/vitor/Documents/projetos/nodeJsEstudos/Docker/9_bind_mount_compose
+    networks: 
+       - dockercompose        
+
+networks:
+   dockercompose: 

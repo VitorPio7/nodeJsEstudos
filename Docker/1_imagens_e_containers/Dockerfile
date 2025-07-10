@@ -1,7 +1,7 @@
 ##Esse é o arquivo responável pela criação da imagem
 
 ##Isso representa que ele vai utilizar a imagem base oficial do Noje.js
-FROM node  
+FROM node
 
 ##Define o diretorio de trabalho dentro do contêiner como /app
 WORKDIR  /app

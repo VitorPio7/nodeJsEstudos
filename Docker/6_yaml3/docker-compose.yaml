@@ -1,0 +1,23 @@
+version: '3.4'
+services:
+  db:
+    image: mysql:5.7.22
+    command: mysqld --default_authentication_plugin=mysql_native_password
+    env_file:
+      - ./config/db.env
+    ports:
+      - 3308:3306
+    networks: ##configuracao da network 
+      - wordpress-network
+  wordpress:
+    image: wordpress:latest
+    volumes:
+      - ./config/php.conf.uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+      - ./wp-app:/var/www/html
+    ports:
+      - 80:80
+    networks: ##configuracao da network 
+      - wordpress-network
+networks:
+    wordpress-network:
+      driver: bridge
