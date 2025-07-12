@@ -1,0 +1,17 @@
+##NODE 4
+ssh -i "Marinalva041821.pem" ec2-user@ec2-18-119-116-115.us-east-2.compute.amazonaws.com 
+
+##NODE 3
+ssh -i "Marinalva041821.pem" ec2-user@ec2-3-135-219-107.us-east-2.compute.amazonaws.com
+
+##NODE 2
+ssh -i "Marinalva041821.pem" ec2-user@ec2-3-144-235-20.us-east-2.compute.amazonaws.com
+
+##NODE 1
+ssh -i "Marinalva041821.pem" ec2-user@ec2-3-143-255-241.us-east-2.compute.amazonaws.com
+
+##Token para join
+docker swarm join --token SWMTKN-1-687bnlu50adbeo9yi4f8mkbuodyijr5bd7btdxizs0xnb4j1zq-1fvd7asmw09fsj72szqysfjog 172.31.14.56:2377
+
+##Info do token 
+docker swarm join-token manager
